@@ -55,11 +55,31 @@ module Api
       options['prefilter'] = build_mr_prefilter if APP_CONFIG['use_map_reduce_prefilter']
       qr = QME::QualityReport.find_or_create(params[:measure_id],
                                            params[:sub_id], options)
-      if !qr.calculated?
+			
+			if !qr.calculated?
+        # full list calculation
+        full_options = options.clone
+        full_options[:filters][:providers] = nil
+
+        fqr = QME::QualityReport.find_or_create(params[:measure_id],
+                                             params[:sub_id], full_options)
+
+        if !fqr.calculated?
+          fqr.calculate( {"oid_dictionary" =>OidHelper.generate_oid_dictionary(fqr.measure),
+          "enable_rationale" => APP_CONFIG['enable_map_reduce_rationale'] || false,
+          "enable_logging" => APP_CONFIG['enable_map_reduce_logging'] || false}, false)
+        end
+
         qr.calculate( {"oid_dictionary" =>OidHelper.generate_oid_dictionary(qr.measure),
           "enable_rationale" => APP_CONFIG['enable_map_reduce_rationale'] || false,
           "enable_logging" => APP_CONFIG['enable_map_reduce_logging'] || false}, true)
-      end
+
+#        fullPercentage = (fqr.DENOM > 0 )? (100* fqr.NUMER/fqr.DENOM).floor : 0
+        
+        qr.fullPercentage = 1234 #qr[QME::QualityReport::NUMERATOR].to_f
+        qr.save!
+    	end
+
 
       render json: qr
     end

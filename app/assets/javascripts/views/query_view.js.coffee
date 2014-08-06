@@ -19,6 +19,7 @@ class Thorax.Views.QueryView extends Thorax.View
   exclusions: -> @model.exclusions()
   hasOutliers: -> @model.hasOutliers()
   outliers: -> @model.outliers()
+  fullPercentage: -> @model.fullPercentage()
   performanceRate: -> @model.performanceRate()
   performanceDenominator: -> @model.performanceDenominator()
   episode_of_care: -> @model.parent.get('episode_of_care')

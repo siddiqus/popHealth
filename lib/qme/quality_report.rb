@@ -3,8 +3,8 @@
 module QME
   class QualityReport
 
-
-
+		field :fullPercentage, type: Float
+   	  
     # Removes the cached results for the patient with the supplied id and
     # recalculates as necessary
     def self.update_patient_results(id)

@@ -16,7 +16,12 @@
     <div class="denominator">{{formatNumeral fractionBottom '0.[0]a'}}</div>
   </div>
 
-  <div class="pop-chart pull-left"></div>
+  <!-- <div class="pop-chart pull-left"></div> 
+  <div> Aggregate:  </div> -->
 
-  <a href="#measures/{{id}}{{#if sub_id}}/{{sub_id}}{{/if}}{{#if provider_id}}/providers/{{provider_id}}{{/if}}/patient_results" class="patient-btn pull-right">Patients</a>
+  <a href="#measures/{{id}}{{#if sub_id}}/{{sub_id}}{{/if}}{{#if provider_id}}/providers/{{provider_id}}{{/if}}/patient_results" class="patient-btn pull-left" style="margin-left:20px">Patients</a>
+  
+  <div class='pull-left' style="margin-left:20px"> Aggregate: {{fullPercentage}} </div>
+  
+ 
 </div>
