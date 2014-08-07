@@ -52,6 +52,7 @@
       <a href="/api/reports/qrda_cat3.xml{{#if effective_date}}?effective_date={{effective_date}}{{/if}}{{#if provider_id}}&provider_id={{provider_id}}{{/if}}" class="btn btn-primary"><i class="glyphicon glyphicon-download-alt"></i> Export</a>
     </div>
   </div>
+  
   {{#collection selectedCategories item-context=selectedCategoryContext item-filter=categoryFilter}}
     <h2>{{category}}</h2>
 
@@ -66,6 +67,7 @@
             <div class="denominator">Denominator</div>
           </div>
         </div>
+        <div class="pull-right" style="margin-right:40px;margin-top:10px"> Aggregate </div>
       </div>
 
       {{#collection proportionBasedMeasures item-context=measureContext item-filter=../../measureFilter}}

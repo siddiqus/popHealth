@@ -76,7 +76,7 @@ module Api
 
 #        fullPercentage = (fqr.DENOM > 0 )? (100* fqr.NUMER/fqr.DENOM).floor : 0
         
-        qr.fullPercentage = 1234 #qr[QME::QualityReport::NUMERATOR].to_f
+        qr.fullPercentage = 64 #qr[QME::QualityReport::NUMERATOR].to_f
         qr.save!
     	end
 

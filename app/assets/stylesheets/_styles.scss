@@ -8,6 +8,13 @@ body {
   margin-bottom: 40px;
 }
 
+#right_div {
+	display: inline-block;
+	position: relative;
+	float: right;
+	vertical-align: top;
+}
+
 #measureSelectors {
   word-wrap: break-word;
 }
@@ -30,7 +37,7 @@ body {
 }
 
 .row-remainder {
-  @include make-xs-column(5, 0);
+  //@include make-xs-column(5, 0);
 }
 
 .fraction-listing {
@@ -183,7 +190,13 @@ body {
   .percent-listing {
     text-align: center;
   }
-
+  
+  .full-percent-listing {
+    text-align: center;
+    float: right;
+    margin-right: 30px;
+  }
+  
 }
 
 // Fix for showing cursor on dashboard filters
