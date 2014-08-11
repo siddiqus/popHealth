@@ -1,0 +1,32 @@
+<div class="percent-listing">
+	{{#if shouldDisplayPercentageVisual}}
+	  <input type="text" value="{{resultValue}}" class="dial" data-readOnly="true" data-width="80" data-height="80" data-thickness=".1" data-fgColor="#4B979D" data-inputColor="#444" data-font="Helvetica Neue, Roboto, Helvetica, Arial, sans-serif" data-font-weight="400"/>
+	{{else}}
+	  <span class="percentage">{{formatNumeral resultValue '0.[0]a'}}<small>{{unit}}</small></span>
+	{{/if}}
+</div>
+
+<div class="row-remainder">
+	<div class="measure-type pull-left">
+	  <i class="{{#if episode_of_care}}fa fa-stethoscope{{else}}glyphicon glyphicon-user{{/if}} icon-popover" data-placement="bottom" data-content="{{#if episode_of_care}}Episodes-of-Care{{else}}Patients{{/if}}" data-trigger="hover focus"></i>
+	</div>
+
+	<div class="fraction-listing pull-left" style="margin-left:16px">
+	  <div class="numerator">{{formatNumeral fractionTop '0.[0]a'}}</div>
+	  <div class="denominator">{{formatNumeral fractionBottom '0.[0]a'}}</div>
+	</div>
+
+	<!-- <div class="pop-chart pull-left"></div> -->
+
+	<a href="#measures/{{id}}{{#if sub_id}}/{{sub_id}}{{/if}}{{#if provider_id}}/providers/{{provider_id}}{{/if}}/patient_results" class="patient-btn pull-left" style="margin-left:20px">Patients</a>	
+		 
+</div>
+
+<div class="full-percent-listing pull-right">
+	{{#if shouldDisplayPercentageVisual}}
+	  <input type="text" value="{{fullPercentage}}" class="dial" data-readOnly="true" data-width="80" data-height="80" data-thickness=".1" data-fgColor="#66cc33" data-inputColor="#444" data-font="Helvetica Neue, Roboto, Helvetica, Arial, sans-serif" data-font-weight="400">
+	{{else}}
+	  <span class="percentage">{{formatNumeral fullPercentage '0.[0]a'}}<small>{{unit}}</small></span>
+	{{/if}}
+</div>
+

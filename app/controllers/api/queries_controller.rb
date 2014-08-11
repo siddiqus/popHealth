@@ -28,6 +28,13 @@ module Api
     description "Gets a clinical quality measure calculation. If calculation is completed, the response will include the results."
     def show
       @qr = QME::QualityReport.find(params[:id])
+      
+      if ! @qr.fullPercentage
+	      fqr = QME::QualityReport.where(measure_id: @qr.measure_id, sub_id: @qr.sub_id, 'filters.providers' => nil).first
+  	    @qr.fullPercentage = 100* ((fqr.result.NUMER).to_f / (fqr.result.DENOM).to_f)
+  	    @qr.save!
+  		end
+      
       authorize! :read, @qr
       render json: @qr
     end
@@ -56,14 +63,14 @@ module Api
       qr = QME::QualityReport.find_or_create(params[:measure_id],
                                            params[:sub_id], options)
 			
-			if !qr.calculated?
-        # full list calculation
-        full_options = options.clone
-        full_options[:filters][:providers] = nil
+			# full list calculation
+      full_options = options.clone
+      full_options[:filters][:providers] = nil
 
-        fqr = QME::QualityReport.find_or_create(params[:measure_id],
+      fqr = QME::QualityReport.find_or_create(params[:measure_id],
                                              params[:sub_id], full_options)
-
+			
+			if !qr.calculated?
         if !fqr.calculated?
           fqr.calculate( {"oid_dictionary" =>OidHelper.generate_oid_dictionary(fqr.measure),
           "enable_rationale" => APP_CONFIG['enable_map_reduce_rationale'] || false,
@@ -73,10 +80,6 @@ module Api
         qr.calculate( {"oid_dictionary" =>OidHelper.generate_oid_dictionary(qr.measure),
           "enable_rationale" => APP_CONFIG['enable_map_reduce_rationale'] || false,
           "enable_logging" => APP_CONFIG['enable_map_reduce_logging'] || false}, true)
-
-#        fullPercentage = (fqr.DENOM > 0 )? (100* fqr.NUMER/fqr.DENOM).floor : 0
-        
-        qr.fullPercentage = 64 #qr[QME::QualityReport::NUMERATOR].to_f
         qr.save!
     	end
 
