@@ -30,7 +30,14 @@ module Api
           q.save
         end
       end
-
+			
+			QME::QualityReport.where({'_id'=> "523c57e2949d9dd06956b602"}).each do |q|
+				if q.filters
+          q.filters["providers"] = []
+          q.save
+        end
+			end
+			
       QME::PatientCache.where({}).each do |pc|
         if pc.value["filters"]
           pc.value["filters"]["providers"] = [@provider.id]
@@ -38,8 +45,6 @@ module Api
         end
       end
     end
-
-
 
     test "show admin" do
       sign_in @admin
@@ -170,6 +175,9 @@ module Api
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
       assert_response :success, "admin should be able to create reports for npis "
 
+      post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
+      assert_response :success, "admin should be able to create reports for aggregate"
+      
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212
       assert_response :success, "admin should be able to create reports for no npi "
     end
@@ -179,6 +187,9 @@ module Api
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
       assert_response :success, "staff should be able to create all reports for npis"
 
+      post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
+      assert_response :success, "staff should be able to create reports for aggregate"
+
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212
       assert_response :success, "staff should be able to create all reports for no npi"
     end
@@ -187,6 +198,9 @@ module Api
       sign_in @npi_user
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
       assert_response :success, "should be able to create a quality report for users own npi"
+
+			post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
+      assert_response :success, "user should be able to create reports for aggregate"
 
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212
       assert_response 403, "should be unauthorized without npi"

@@ -39,8 +39,12 @@ class Ability
         patient.providers.map(&:npi).include?(user.npi)
       end
       can [:read,:delete, :recalculate, :create], QME::QualityReport do |qr|
-         provider = Provider.by_npi(user.npi).first
-         provider ? (qr.filters || {})["providers"].include?(provider.id) : false
+      	provider = Provider.by_npi(user.npi).first
+      	if provider 
+        	(qr.filters || {})["providers"].include?(provider.id) || (qr.filters["providers"] == [])
+      	else 
+      		false
+      	end
       end
       can :read, HealthDataStandards::CQM::Measure
       can :read, Provider do |pv|
