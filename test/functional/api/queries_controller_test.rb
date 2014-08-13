@@ -175,7 +175,7 @@ module Api
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
       assert_response :success, "admin should be able to create reports for npis "
 
-      post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
+      post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[]
       assert_response :success, "admin should be able to create reports for aggregate"
       
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212
@@ -187,7 +187,7 @@ module Api
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
       assert_response :success, "staff should be able to create all reports for npis"
 
-      post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
+      post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[]
       assert_response :success, "staff should be able to create reports for aggregate"
 
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212
@@ -199,7 +199,7 @@ module Api
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
       assert_response :success, "should be able to create a quality report for users own npi"
 
-			post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
+			post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[]
       assert_response :success, "user should be able to create reports for aggregate"
 
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212
@@ -210,6 +210,9 @@ module Api
       sign_in @user
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[@provider.id]
       assert_response 403, "Should be unauthorized for npi"
+
+			post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212, :providers=>[]
+      assert_response 403, "user should not be able to create reports for aggregate"
 
       post :create, :measure_id=>'40280381-3D61-56A7-013E-6649110743CE', :sub_id=>"a", :effective_date=>1212121212
       assert_response 403, "Should be unauthorized with no npi"
