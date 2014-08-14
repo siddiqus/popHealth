@@ -16,21 +16,27 @@ body {
   @extend .row;
   .measure-title-id {
     // .make-xs-column(3);
-    @include make-xs-column(5, 0); // use gutter of 0, to eliminate left gutter
+    @include make-xs-column(4,0); // use gutter of 0, to eliminate left gutter
     // margin-right: $grid-gutter-width / 2; // reintroduce right gutter
     min-height: 100px;
+
   }
   .percent-listing {
     @include make-xs-column(2);
   }
   .patient-btn {
     @extend .btn;
-    @extend .btn-default;
+    @extend .btn-default;    
+  }
+  .full-percent-listing {
+  	@include make-xs-column(1,0);
+  	margin-top: 0px;
   }
 }
 
 .row-remainder {
-  //@include make-xs-column(5, 0);
+  @include make-xs-column(5, 0);
+	margin-right: -10px;
 }
 
 .fraction-listing {
@@ -113,7 +119,7 @@ body {
       font-weight: 400;
       font-size: 12px;
       margin: 4px 0 0 -10px;
-      padding-left: 20px;
+      padding-left: 0px;
 
       .numerator,
       .denominator {
@@ -183,6 +189,9 @@ body {
   .percent-listing {
     text-align: center;
   }
+  .full-percent-listing {
+    text-align: center;
+  }
 }
 
 // Fix for showing cursor on dashboard filters
@@ -211,7 +220,7 @@ body {
   margin-top: 10px;
   margin-bottom: 10px;
   height: 50px;
-  width: 165px;
+  width: 150px;
   // shrink this down on smaller displays
   @media (max-width: $screen-md-max) {
     width: 100px;

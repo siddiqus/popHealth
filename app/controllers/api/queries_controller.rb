@@ -152,8 +152,6 @@ module Api
           provider = Provider.find(p)
           authorize! :read, provider
         end
-      elsif Provider.valid_npi?(@current_user.npi) 
-      	authorize! :read, Provider.all
       else
         #this is hacky and ugly but cancan will allow just the
         # class Provider to pass for a simple user so providing
