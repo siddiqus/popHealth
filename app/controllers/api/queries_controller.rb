@@ -70,18 +70,16 @@ module Api
       fqr = QME::QualityReport.find_or_create(params[:measure_id], params[:sub_id], full_options)
 			
 			if !qr.calculated?
-        if !fqr.calculated?
-          fqr.calculate( {"oid_dictionary" =>OidHelper.generate_oid_dictionary(fqr.measure),
-          "enable_rationale" => APP_CONFIG['enable_map_reduce_rationale'] || false,
-          "enable_logging" => APP_CONFIG['enable_map_reduce_logging'] || false}, true)
-        end
-
         qr.calculate( {"oid_dictionary" =>OidHelper.generate_oid_dictionary(qr.measure),
           "enable_rationale" => APP_CONFIG['enable_map_reduce_rationale'] || false,
           "enable_logging" => APP_CONFIG['enable_map_reduce_logging'] || false}, true)
-        qr.save!
     	end
 
+      if !fqr.calculated?
+        fqr.calculate( {"oid_dictionary" =>OidHelper.generate_oid_dictionary(fqr.measure),
+        "enable_rationale" => APP_CONFIG['enable_map_reduce_rationale'] || false,
+        "enable_logging" => APP_CONFIG['enable_map_reduce_logging'] || false}, true)
+      end
 
       render json: qr
     end

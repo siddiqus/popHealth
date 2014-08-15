@@ -30,6 +30,7 @@ class Thorax.Views.ResultsView extends Thorax.View
     destroyed: ->
       clearInterval(@timeout) if @timeout?
   shouldDisplayPercentageVisual: -> !@model.isContinuous() and PopHealth.currentUser.shouldDisplayPercentageVisual()
+  showAggregatePercentage: -> !@model.isContinuous() and PopHealth.currentUser.showAggregatePercentage()
   context: (attrs) ->
     _(super).extend
       unit: if @model.isContinuous() and @model.parent.get('cms_id') isnt 'CMS179v2' then 'min' else '%'
@@ -118,6 +119,7 @@ class Thorax.Views.Dashboard extends Thorax.View
     _(category.toJSON()).extend
       cvMeasures:               cvMeasures
       proportionBasedMeasures:  proportionBasedMeasures
+      showAggregatePercentage: 	PopHealth.currentUser.showAggregatePercentage()
       measureContext: @measureContext
 
   measureContext: (measure) ->

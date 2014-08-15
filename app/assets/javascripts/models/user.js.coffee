@@ -5,7 +5,8 @@ class Thorax.Models.User extends Thorax.Model
   maskStatus: -> @get('preferences').mask_phi_data
   shouldDisplayPercentageVisual: -> @get('preferences').should_display_circle_visual
   populationChartScaledToIPP: -> @get('preferences').population_chart_scaled_to_IPP
-
+  showAggregatePercentage: -> @get('preferences').show_aggregate_percentage
+#	showAggregatePercentage: -> @get('preferences').show_aggregate_percentage
 
   setPopulationChartScale: (value) ->
     @get('preferences').population_chart_scaled_to_IPP = value

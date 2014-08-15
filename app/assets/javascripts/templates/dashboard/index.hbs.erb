@@ -58,15 +58,17 @@
     {{#if proportionBasedMeasures.length}}
       <div class="category">
         <div class="category-percent">
-          <div class="title-circle">%</div>
+          <div class="title-circle" style="{{#unless showAggregatePercentage}}margin-left:105px;{{/unless}}">%</div>
         </div>
         <div class="category-fraction">
-          <div class="fraction-listing">
+          <div class="fraction-listing" style="{{#unless showAggregatePercentage}}margin-left:70px;{{/unless}}">
             <div class="numerator">Numerator</div>
             <div class="denominator">Denominator</div>
           </div>
         </div>
-        <div class="pull-right" style="margin-right:15px;margin-top:10px"> Aggregate </div>
+        {{#if showAggregatePercentage}}
+        	<div class="pull-right" style="margin-right:15px;margin-top:10px"> Aggregate </div>	
+        {{/if}}		
       </div>
 
       {{#collection proportionBasedMeasures item-context=measureContext item-filter=../../measureFilter}}
