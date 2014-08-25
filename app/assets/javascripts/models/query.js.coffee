@@ -10,7 +10,7 @@ class Thorax.Models.Query extends Thorax.Model
   isContinuous: -> @parent.get('continuous_variable')
   ipp: -> if @isPopulated() and @has('result') then @get('result').IPP else 0
   measurePopulation: -> if @isPopulated() and @has('result') then @get('result').MSRPOPL else 0
-  fullPercentage: -> if @isPopulated() and @has('result') then @get('result').fullPercentage else 0
+  aggregatePercentage: -> if @isPopulated() and @has('result') then @get('result').aggregatePercentage else 0
   numerator: -> if @isPopulated() and @has('result') then @get('result').NUMER else 0
   denominator: -> if @isPopulated() and @has('result') then @get('result').DENOM else 0
   observation: -> if @isPopulated() and @has('result') then @get('result').OBSERV else 0

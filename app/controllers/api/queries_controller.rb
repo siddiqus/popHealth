@@ -29,9 +29,9 @@ module Api
     def show
       @qr = QME::QualityReport.find(params[:id])
            
-      if ! @qr.fullPercentage
+      if ! @qr.aggregatePercentage
 	      fqr = QME::QualityReport.where(measure_id: @qr.measure_id, sub_id: @qr.sub_id, 'filters.providers' => []).first
-  	    @qr.fullPercentage = (fqr.result.DENOM > 0)? 100* ((fqr.result.NUMER).to_f / (fqr.result.DENOM).to_f) : 0
+  	    @qr.aggregatePercentage = (fqr.result.DENOM > 0)? 100* ((fqr.result.NUMER).to_f / (fqr.result.DENOM).to_f) : 0
   	    @qr.save!
   		end
       
@@ -66,7 +66,6 @@ module Api
 			# full list calculation
       full_options = options.clone
       full_options[:filters][:providers] = []
-
       fqr = QME::QualityReport.find_or_create(params[:measure_id], params[:sub_id], full_options)
 			
 			if !qr.calculated?
