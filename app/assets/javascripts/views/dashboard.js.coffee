@@ -69,6 +69,7 @@ class Thorax.Views.Dashboard extends Thorax.View
   events:
     'click .btn-checkbox.all':           'toggleCategory'
     'click .btn-checkbox.individual':    'toggleMeasure'
+    'click .demographics' : 'toggleDemographics'
     'keyup .category-measure-search': 'search'
     'click .clear-search':            'clearSearch'
     'change .rescale': (event) ->
@@ -82,6 +83,10 @@ class Thorax.Views.Dashboard extends Thorax.View
       toggleChevron = (e) -> $(e.target).parent('.panel').find('.panel-chevron').toggleClass 'glyphicon-chevron-right glyphicon-chevron-down'
       @$('.collapse').on 'hidden.bs.collapse', toggleChevron
       @$('.collapse').on 'show.bs.collapse', toggleChevron
+
+  toggleDemographics: (e) ->
+    @$('.demographics').find('.panel-chevron').toggleClass 'glyphicon-chevron-right glyphicon-chevron-down'
+
   initialize: ->
     @selectedCategories = PopHealth.currentUser.selectedCategories(@collection)
     @populationChartScaledToIPP = PopHealth.currentUser.populationChartScaledToIPP()
