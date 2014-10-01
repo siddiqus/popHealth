@@ -81,8 +81,10 @@
         </dl>
       </div>
     </div> --}}
-    {{view "PatientHistory" model=model}}
-<!--    {{view "ClinicalSummaryView" model=model}}
-    {{view "EntryView" model=model}} -->
+    
+    <div class="timeline-entry span">
+      {{view 'FullHistoryView' model=model}}    
+      {{layout-element}}
+    </div>
   </div>  
 </div>

@@ -1,0 +1,28 @@
+{{#collection entries item-view="EntryView"}}
+<div class="circle-icon"><i class="fa fa-{{icon}}"></i></div>
+<div class="patient-data">
+  <div class="patient-data-list">
+    <dl class="dl-horizontal">
+      <dt>{{entry_type}}</dt>
+      <dd>
+        {{#if description}}
+          <div>{{description}}</div>
+        {{else}}
+          <div class="text-muted">No Details Available</div>
+        {{/if}}
+        {{#if values}}
+          <div>
+          {{#join values delimiter=', '}}
+            {{#if description}}{{description}}{{else}}{{scalar}} {{units}}{{/if}}
+          {{/join}}
+          </div>
+        {{/if}}
+      </dd>
+    </dl>
+    <dl class="dl-horizontal">
+      <dt>date</dt>
+      <dd>{{start_time}}{{#if display_end_time}} &ndash; {{end_time}}{{/if}}</dd>
+    </dl>
+  </div>
+</div>
+{{/collection}}

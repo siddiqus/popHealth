@@ -1,10 +1,12 @@
-class Thorax.Views.PatientHistory extends Thorax.View
-  initialize: ->
-    view = new Thorax.Views.ClinicalSummaryView model: @model
-    @setView = view
+class PatientHistoryView extends Thorax.View
+  fullHistoryIsActive: -> @parent.fullHistoryIsActive()
+  measureRelativeIsActive: -> @parent.measureRelativeIsActive()
 
-class Thorax.Views.ClinicalSummaryView extends Thorax.View
-  template: JST['patients/clinical_summary']
+class Thorax.Views.MeasureRelativeView extends Thorax.View
+  template: JST['patients/timeline']
+
+class Thorax.Views.FullHistoryView extends Thorax.View
+  template: JST['patients/full_history']
   context: ->
     _(super).extend   
       # sections
@@ -21,9 +23,14 @@ class Thorax.Views.ClinicalSummaryView extends Thorax.View
 class Thorax.Views.PatientView extends Thorax.View
   template: JST['patients/show']
   events:
+    'click .measure-relative-btn': 'activateMeasureRelativeView'
+    'click .clinical-history-btn': 'activateFullHistoryView'
     rendered: ->
       @$('#measures').on 'show.bs.collapse hide.bs.collapse', (e) ->
         $(e.target).prev().toggleClass('active').find('.submeasure-expander .fa').toggleClass('fa-plus-square-o fa-minus-square-o')
+  initialize: ->
+    @patientHistoryView = new PatientHistoryView model: @model
+    
   context: ->
     _(super).extend
       first: PopHealth.Helpers.maskName @model.get('first')
@@ -37,6 +44,26 @@ class Thorax.Views.PatientView extends Thorax.View
       provider: if @model.has('provider_name') then @model.get('provider_name') else 'Not Available'
       measures: @measures()
 
+  changeHistoryView: (model, population) ->
+    if submeasure isnt @submeasure
+      @submeasure = submeasure
+      @submeasureView.setModel @submeasure
+      @sidebarView.changeSubmeasure submeasure
+      view = @getView()
+      url = "measures/#{submeasure.collection.parent.id}/#{submeasure.id}/providers/#{@provider_id}"
+      if @logicIsActive()
+        view.setModel @submeasure, render: true
+      else
+        url += '/patient_results'
+        view.setQuery @submeasure.getQueryForProvider @provider_id
+      PopHealth.router.navigate url
+    @getView().changeHistoryView population
+  
+  activeHistoryView: ->
+    view = new Thorax.Views
+    
+  activeateMeasureRelativeView: ->
+      
   measures: ->
     measures = new Thorax.Collection
     if @model.has 'measure_results'
