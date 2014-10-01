@@ -1,3 +1,6 @@
+class Thorax.Views.ClinicalSummaryView extends Thorax.View
+  template: JST['patients/clinical_summary']
+
 class Thorax.Views.PatientView extends Thorax.View
   template: JST['patients/show']
   events:
@@ -16,6 +19,17 @@ class Thorax.Views.PatientView extends Thorax.View
       languages: if _.isEmpty(@model.get('language_names')) then 'Not Available' else @model.get('language_names')
       provider: if @model.has('provider_name') then @model.get('provider_name') else 'Not Available'
       measures: @measures()
+      
+      # sections
+      allergies: @model.allergies
+      conditions: @model.conditions
+      encounters: @model.encounters
+      immunizations: @model.immunizations
+      medical_equipment: @model.medical_equipment
+      results: @model.results
+      medications: @model.medications
+      procedures: @model.procedures
+      vital_signs: @model.vital_signs
 
   measures: ->
     measures = new Thorax.Collection

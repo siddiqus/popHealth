@@ -24,15 +24,6 @@
       </div>
       {{/collection}}
     </div>
-
-
-    {{!--
-    {{#collection measure_results}}
-      <a href="#measures/{{measure_id}}{{#if sub_id}}/{{sub_id}}{{/if}}" class="btn btn-measure btn-default">
-        {{measure_title}}{{#if measure_subtitle}}: {{measure_subtitle}}{{/if}}
-      </a>
-    {{/collection}}
-    --}}
   </div>
 
   <div class="col-patient-info">
@@ -60,7 +51,14 @@
       </div>
     </div>
 
-    <header class="timeline-entry"><h2>Patient History Relative to Measures</h2></header>
+    <div class="timeline-entry row-inline span btn-group"> 
+      <div class="btn span pull-left measure-relative-btn">
+        <h4>Patient History Relative to Measures</h4>
+      </div>
+      <div class="btn span pull-right clinical-summary-btn">
+        <h4>Clinical Summary</h4>
+      </div> 
+    </div>
 
     {{!--
       The following section can be added back in after filtering is added and
@@ -83,6 +81,7 @@
         </dl>
       </div>
     </div> --}}
+<!--    
     {{#collection entries item-view="EntryView"}}
       <div class="timeline-entry">
         <div class="circle-icon"><i class="fa fa-{{icon}}"></i></div>
@@ -113,5 +112,5 @@
         </div>
       </div>
     {{/collection}}
-  </div>
+  </div>  
 </div>

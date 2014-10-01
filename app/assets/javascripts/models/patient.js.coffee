@@ -6,6 +6,16 @@ class Thorax.Models.Patient extends Thorax.Model
     options.data.include_results = true
     super options
   parse: (attrs) ->
+    @allergies = new Thorax.Collection attrs.allergies
+    @conditions = new Thorax.Collection attrs.conditions
+    @encounters = new Thorax.Collection attrs.encounters
+    @immunizations = new Thorax.Collection attrs.immunizations
+    @medical_equipment = new Thorax.Collection attrs.medical_equipment
+    @results = new Thorax.Collection attrs.results
+    @medications = new Thorax.Collection attrs.medications
+    @procedures = new Thorax.Collection attrs.procedures
+    @vital_signs = new Thorax.Collection attrs.vital_signs     
+    
     attrs = $.extend {}, attrs
     attrs.birthdate = attrs.birthdate * 1000
     attrs.effective_time = attrs.effective_time * 1000

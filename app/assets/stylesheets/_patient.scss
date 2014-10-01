@@ -1,3 +1,29 @@
+.line-break {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.patient-section {
+  margin-top: 10px;
+  width: 49%;
+  .section-body {
+    padding: 15px 15px 15px 15px;
+    height: 200px;
+    overflow-y: scroll;
+    border: 2px solid $gray-lighter;
+  }
+}
+
+.measure-relative-btn {
+  background-color: $gray-lighter;   
+  width: 49%; 
+}
+.clinical-summary-btn {
+  background-color: $gray-lighter;    
+  width: 49%;
+}
+
+
 .patient {
   @include make-row();
   .col-measure-info {
@@ -13,6 +39,7 @@
     //   background-color: $gray;
     // }
     .timeline-entry {
+      width: 100%;
       border-left: 8px solid $gray-lighter;
       padding: 25px 0 0 $grid-gutter-width;
       margin: -15px 0 15px 0;
@@ -20,8 +47,9 @@
         border-left: 8px solid $brand-primary;
       }
     }
+        
     header.timeline-entry {
-      background-color: $gray-lighter;
+//      background-color: $gray-lighter;
       padding: 8px 0 8px $grid-gutter-width;
       h2 {
         margin: 0;
@@ -68,7 +96,6 @@
       margin-top: 5px;
     }
   }
-
 
   .circle-icon {
     $radius: 18px;
