@@ -14,15 +14,9 @@
   }
 }
 
-.measure-relative-btn {
-  background-color: $gray-lighter;   
+.measure-relative-btn, .patient-summary-btn {
   width: 49%; 
 }
-.clinical-summary-btn {
-  background-color: $gray-lighter;    
-  width: 49%;
-}
-
 
 .patient {
   @include make-row();
@@ -49,7 +43,6 @@
     }
         
     header.timeline-entry {
-//      background-color: $gray-lighter;
       padding: 8px 0 8px $grid-gutter-width;
       h2 {
         margin: 0;
