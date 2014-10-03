@@ -55,7 +55,7 @@
       <div class="btn btn-default pull-left measure-relative-btn">
         <h4>Patient History Relative to Measures</h4>
       </div>
-      <div class="btn btn-default pull-right patient-summary-btn">
+      <div class="btn btn-default btn-primary pull-right patient-summary-btn">
         <h4>Patient Summary</h4>
       </div> 
     </div>
@@ -82,8 +82,8 @@
       </div>
     </div> --}}
     
-    <div class="timeline-entry span">
-     
+    <div class="timeline-entry">
+      {{view "FullSummaryView" model=model}} 
     </div>
   </div>  
 </div>

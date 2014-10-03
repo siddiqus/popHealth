@@ -1,14 +1,4 @@
-class Thorax.Views.PatientHistoryView extends Thorax.View
-  initialize: -> 
-    if @parent.fullHistoryIsActive
-      @setView new Thorax.Views.FullHistoryView model: @model
-    else
-      @setView new Thorax.Views.MeasureRelativeView model: @model
-    
-#class Thorax.Views.MeasureRelativeView extends Thorax.View
-#  template: JST['patients/measure_relative']
-
-class Thorax.Views.FullHistoryView extends Thorax.View
+class Thorax.Views.PatientSummaryView extends Thorax.View
   template: JST['patients/full_history']
   context: ->
     _(super).extend   
@@ -31,44 +21,23 @@ class Thorax.Views.PatientView extends Thorax.View
     rendered: ->
       @$('#measures').on 'show.bs.collapse hide.bs.collapse', (e) ->
         $(e.target).prev().toggleClass('active').find('.submeasure-expander .fa').toggleClass('fa-plus-square-o fa-minus-square-o')
+      
   initialize: ->
-    @fullHistoryIsActive = true
-    @measureRelativeIsActive = false
-#    @patientHistory = new Thorax.Views.PatientHistoryView model: @model
-  
+    @SummaryIsActive = true
+#    @patientHistoryView = new Thorax.Views.SummaryView
+    
   activateMeasureRelativeView: (e) ->
     @$('.measure-relative-btn').addClass 'btn-primary'
     @$('.patient-summary-btn').removeClass 'btn-primary'
-#    @$('.patient-summary-btn').toggleClass 'btn-primary'
-#    @measureRelativeView = true
-#    @fullHistoryView = false
-#    view = new Thorax.Views.MeasureRelativeView model: @model
-#    @setView view
-#  
+    @patientSummaryIsActive = false
+    @patientHistoryView.render()
+
   activatePatientSummaryView: (e) ->
     @$('.measure-relative-btn').removeClass 'btn-primary'
     @$('.patient-summary-btn').addClass 'btn-primary'
-    view = new Thorax.Views.FullHistoryView model: @model
-    @setView view   
-
-  patientFullHistory: (id) -> 
-    currentView = @view.getView()
-    patientRecord = new Thorax.Models.Patient '_id' : id
-    unless currentView instanceOf Thorax.Views.FullHistoryView
-      currentView = new Thorax.Views.FullHistoryView model: patientRecord       
-      @view.setView currentView
-    currentView.activateFullHistoryView()
-    
-  patientMeasureRelative: (id) ->
-    currentView = @view.getView()
-    patientRecord = new Thorax.Models.Patient '_id' : id
-    unless currentView instanceOf Thorax.Views.MeasureRelativeView
-      currentView = new Thorax.Views.MeasureRelative model: patientRecord       
-      @view.setView currentView
-    currentView.activateMeasureRelativeView()
-
-
-    
+    @patientSummaryIsActive = true
+    @patientHistoryView.render()
+   
   context: ->
     _(super).extend
       first: PopHealth.Helpers.maskName @model.get('first')
@@ -82,22 +51,7 @@ class Thorax.Views.PatientView extends Thorax.View
       provider: if @model.has('provider_name') then @model.get('provider_name') else 'Not Available'
       measures: @measures()
       patientHistory: @patientHistory
-
-  changeHistoryView: (model, population) ->
-    if submeasure isnt @submeasure
-      @submeasure = submeasure
-      @submeasureView.setModel @submeasure
-      @sidebarView.changeSubmeasure submeasure
-      view = @getView()
-      url = "measures/#{submeasure.collection.parent.id}/#{submeasure.id}/providers/#{@provider_id}"
-      if @logicIsActive()
-        view.setModel @submeasure, render: true
-      else
-        url += '/patient_results'
-        view.setQuery @submeasure.getQueryForProvider @provider_id
-      PopHealth.router.navigate url
-    @getView().changeHistoryView population
-       
+      
   measures: ->
     measures = new Thorax.Collection
     if @model.has 'measure_results'
@@ -113,7 +67,7 @@ class Thorax.Views.PatientView extends Thorax.View
   formatTime = (time, format) -> moment(time).format(format) if time
 
 class Thorax.Views.EntryView extends Thorax.View
-  template: JST['patients/timeline']
+  template: JST['patients/measure_relative']
   context: ->
     _(super).extend
       start_time: formatTime @model.get('start_time')
