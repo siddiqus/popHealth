@@ -32,7 +32,7 @@ module HealthDataStandards
           end
         end
 
-        upload_log.write("#{count}" + "\n")
+#        upload_log.write("#{count}" + "\n")
         missing_patients = []
 
         #if there was a patient manifest, theres a patient id list we need to load
@@ -105,10 +105,10 @@ module HealthDataStandards
             providers = CDA::ProviderImporter.instance.extract_providers(doc, record)
           rescue Exception => e
             STDERR.puts "error extracting providers"
-            error_log.write( $! )
-		      	error_log.write("\n")
-		      	errpr_log.write ( $@ )
-            upload_log.write("MRN: " + "#{xml_data}" + "\n")
+#            error_log.write( $! )
+#		      	error_log.write("\n")
+#		      	errpr_log.write ( $@ )
+#            upload_log.write("MRN: " + "#{xml_data}" + "\n")
           end
         else
           return {status: 'error', message: 'Unknown XML Format', status_code: 400}

@@ -7,10 +7,13 @@ class ImportArchiveJob
     @practice = options['practice']
     @error_log = options['error_log']
     @upload_stats = options['upload_log']
+    @filename = options['filename']
   end
 
   def before
-    Log.create(:username => @current_user.username, :event => 'record import')
+    practice = @practice ? Practice.find(@practice).name : nil
+      
+    Log.create(:username => @current_user.username, :event => 'record import', :practice => practice, :filename => @filename)
   end
 
   def perform

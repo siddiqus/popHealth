@@ -17,5 +17,8 @@ doc
 Thumbs.db
 .bundle
 .bundle/config
+upload_errors.txt
+error_files.txt
+
 dump.rdb
 .tags*
