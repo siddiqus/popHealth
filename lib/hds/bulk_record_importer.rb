@@ -11,14 +11,15 @@ module HealthDataStandards
         end
       end
 
-      def self.import_archive(file, failed_dir=nil, practice=nil)
+      def self.import_archive(file, failed_dir=nil, practice=nil, error_log=nil, upload_log=nil)
         begin
         failed_dir ||=File.join(File.dirname(file))
 
         patient_id_list = nil
-
+        count = 0;
         Zip::ZipFile.open(file.path) do |zipfile|
           zipfile.entries.each do |entry|
+            count+= 1;
             if entry.name
               if entry.name.split("/").last == "patient_manifest.txt"
                 patient_id_list = zipfile.read(entry.name)
@@ -27,10 +28,11 @@ module HealthDataStandards
             end
             next if entry.directory?
             data = zipfile.read(entry.name)
-            BulkRecordImporter.import_file(entry.name,data,failed_dir,nil,practice)
+            BulkRecordImporter.import_file(entry.name,data,failed_dir,nil,practice, error_log, upload_log)
           end
         end
 
+        upload_log.write("#{count}" + "\n")
         missing_patients = []
 
         #if there was a patient manifest, theres a patient id list we need to load
@@ -56,13 +58,13 @@ module HealthDataStandards
       end
       end
 
-      def self.import_file(name,data,failed_dir,provider_map={}, practice=nil)
+      def self.import_file(name,data,failed_dir,provider_map={}, practice=nil, error_log=nil, upload_log=nil)
         begin
           ext = File.extname(name)
           if ext == ".json"
             BulkRecordImporter.import_json(data)
           else
-            BulkRecordImporter.import(data, {}, practice)
+            BulkRecordImporter.import(data, {}, practice, error_log, upload_log)
           end
         rescue
           FileUtils.mkdir_p(File.dirname(File.join(failed_dir,name)))
@@ -76,7 +78,7 @@ module HealthDataStandards
         end
       end
 
-      def self.import(xml_data, provider_map = {}, practice_id=nil)
+      def self.import(xml_data, provider_map = {}, practice_id=nil, error_log=nil, upload_log=nil)
         doc = Nokogiri::XML(xml_data)
 
         providers = []
@@ -103,6 +105,10 @@ module HealthDataStandards
             providers = CDA::ProviderImporter.instance.extract_providers(doc, record)
           rescue Exception => e
             STDERR.puts "error extracting providers"
+            error_log.write( $! )
+		      	error_log.write("\n")
+		      	errpr_log.write ( $@ )
+            upload_log.write("MRN: " + "#{xml_data}" + "\n")
           end
         else
           return {status: 'error', message: 'Unknown XML Format', status_code: 400}
