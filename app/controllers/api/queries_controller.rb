@@ -31,12 +31,12 @@ module Api
 
       if !@qr.aggregate_result && !APP_CONFIG['use_opml_structure']
         cv = HealthDataStandards::CQM::Measure.where(id: @qr.measure_id).first.continuous_variable
-        aqr = QME::QualityReport.where(measure_id: @qr.measure_id, sub_id: @qr.sub_id, 'filters.providers' => [], effective_date: @qr.effective_date).first  	           
+        aqr = QME::QualityReport.where(measure_id: @qr.measure_id, sub_id: @qr.sub_id, 'filters.providers' => [Provider.root.id.to_s], effective_date: @qr.effective_date).first  	           
         if aqr.result
           if cv 
             @qr.aggregate_result = aqr.result.OBSERV
           else
-            @qr.aggregate_result = (aqr.result.DENOM > 0)? (100*((aqr.result.NUMER).to_f / (aqr.result.DENOM - aqr.result.DENEXCEP - aqr.result.DENEX).to_f)).to_i : 0
+            @qr.aggregate_result = (aqr.result.DENOM > 0)? (100*((aqr.result.NUMER).to_f / (aqr.result.DENOM - aqr.result.DENEXCEP - aqr.result.DENEX).to_f)).round : 0
           end
 	        @qr.save!
         end
@@ -77,7 +77,7 @@ module Api
 
       unless APP_CONFIG['use_opml_structure']	
         agg_options = options.clone
-        agg_options[:filters][:providers] = []
+        agg_options[:filters][:providers] = [Provider.root.id.to_s]
         aqr = QME::QualityReport.find_or_create(params[:measure_id],
                                            params[:sub_id], agg_options)
         if !aqr.calculated?
