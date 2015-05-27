@@ -1,7 +1,7 @@
 development:
   sessions:
     default:
-      database: pophealth-development
+      database: cipci_v3 #pophealth-development
       hosts:
         - localhost:27017
 test:
@@ -13,6 +13,6 @@ test:
 production:
   sessions:
     default:
-      database: pophealth-production
+      database: cipci_v3 #pophealth-production
       hosts:
         - localhost:27017

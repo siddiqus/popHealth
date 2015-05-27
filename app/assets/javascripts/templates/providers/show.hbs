@@ -10,6 +10,7 @@
   </h5>
 </div> 
 <h2>{{providerType}}: {{providerExtension}}, {{title}} {{given_name}} {{family_name}}</h2>
+<h2># of Patients: {{patient_count}} </dd> </h2>
 
 <h4>{{specialty}}</h4>
 <h4>{{organization.name}}</h4>
@@ -17,7 +18,7 @@
 
 <div class="row">
 <div class="col-md-3">
-	<dl class="dl-horizontal">
+	<dl class="dl-horizontal">  
 	  <dt>Tax ID:</dt>
   	{{#if tin}}
       <dd>{{tin}}</dd>
@@ -29,12 +30,6 @@
       <dd>{{phone}}</dd>
     {{else}}
       <dd>N/A</dd>
-    {{/if}}
-	  <dt class="text-muted">Team:</dt>
-    {{#if teamn.name}}
-  	  <dd class="text-muted">{{team.name}}</dd>
-    {{else}}
-      <dd class="text-muted">N/A</dd>
     {{/if}}
     <dt class="text-muted">NPI:</dt>
     {{#if npi}}

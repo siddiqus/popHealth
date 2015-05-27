@@ -73,7 +73,7 @@ PopHealth.viz.providerChart = ->
           .on("click", click)
         svg.selectAll(".node:not(.active)")
           .attr('data-placement', "bottom")
-          .attr('data-content', (d) -> "#{d.cda_identifiers[0].root} #{d.cda_identifiers[0].extension} #{d.given_name}")
+          .attr('data-content', (d) -> "NPI: #{d.cda_identifiers[0].extension}, #{d.given_name} #{d.family_name} ")
           .attr('data-trigger', "hover focus")
           .attr('data-container', '#providerChart')
 
@@ -98,7 +98,7 @@ PopHealth.viz.providerChart = ->
           .attr("r", (d) -> d.size)
 
         nodeUpdate.select("text")
-          .text((d) -> if d.active then "#{d.cda_identifiers?[0].root || ""} #{d.cda_identifiers?[0].extension || ""} #{d.given_name}" else "#{d.cda_identifiers?[0].root || ""} #{d.cda_identifiers?[0].extension || ""}")
+          .text((d) -> if d.active then "#{d.cda_identifiers?[0].root || ""} #{d.cda_identifiers?[0].extension || ""} #{d.given_name}" else "NPI: #{d.cda_identifiers?[0].extension || ""} #{d.given_name || ""} #{d.family_name || ""}")
           .attr("transform", (d) -> if d.active then "translate(25) rotate(0)" else "translate(0,15) rotate(30)")
 
 
@@ -151,7 +151,7 @@ PopHealth.viz.providerChart = ->
         .projection((d) -> [d.x, d.y])
       if data.parent_id?
         data.active = true
-        data = {given_name: "#{data.parent.cda_identifiers?[0].root||""} #{data.parent.cda_identifiers?[0].extension||""} #{data.parent.given_name}", _id: data.parent_id, children: [data]}
+        data = {given_name: "#{data.parent.cda_identifiers?[0].root||""}, #{data.parent.cda_identifiers?[0].extension||""} #{data.parent.given_name}", _id: data.parent_id, children: [data]}
       root = data
       root.active = true
       root.size = 8
