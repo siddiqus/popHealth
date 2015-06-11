@@ -179,6 +179,16 @@ h4 {
   }
 }
 
+.main-dashboard {
+  @include make-xs-column(12);
+  .main-heading {
+    @include make-row;
+    .title {
+      @include make-xs-column(3);
+    }
+  }
+}
+
 .category {
   @include make-row(0);
   .category-percent, .category-time {

@@ -87,6 +87,17 @@ class User
     self.staff_role ||= APP_CONFIG["default_user_staff_role"]
     self.approved ||= APP_CONFIG["default_user_approved"]
     self.teams = []
+    
+    self.preferences["selected_measure_ids"] = ["40280381-4555-E1C1-0145-762578A81C4C",
+ "40280381-4555-E1C1-0145-B9A06ACE3771",
+ "40280381-4555-E1C1-0145-762289881C2E",
+ "40280381-4600-425F-0146-1F5867D40E82",
+ "40280381-4600-425F-0146-1F6F722B0F17",
+ "40280381-4555-E1C1-0145-DD4E02E44678",
+ "40280381-4555-E1C1-0145-DC7DC26A44BF",
+ "40280381-4555-E1C1-0145-D2B36DBB3FE6",
+ "40280381-4555-E1C1-0145-9002B50A2963"]
+    
     true
   end
 

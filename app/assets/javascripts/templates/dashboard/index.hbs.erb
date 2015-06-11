@@ -1,4 +1,4 @@
-<div class="sidebar" id="filters">
+<div class="sidebar" id="filters" hidden="true">
   <h3>Filters</h3>
   {{#unless opml}}
   <span class="panel-title btn btn-checkbox btn-block aggregate-btn {{#if showAggregateResult}}active{{/if}}"> 
@@ -40,11 +40,13 @@
   </div>
 </div>
 
-<div class="main">
+<div class="main-dashboard">
   <div class="main-heading">
     <h1 class="title">Measures</h1>
     <div class="header-actions pull-right">
-
+      <div class="panel-title btn btn-checkbox btn-block aggregate-btn {{#if showAggregateResult}}active{{/if}}"> 
+        <i class="fa fa-group"/> &nbsp; AGGREGATE 
+      </div> 
       <div class="btn-group btn-group-md" data-toggle="buttons">
         <label class="btn col-md-6 fa fa-align-left large-icon btn-default{{#unless populationChartScaledToIPP}} active  btn-primary{{/unless}}">
           <input class="rescale" type="radio" value="false" name="population_chart_scale" {{#unless populationChartScaledToIPP}}checked{{/unless}}/>
@@ -54,7 +56,7 @@
         </label>
       </div>
       <div class="dropdown pull-right">
-        <div class="dropdown-toggle pull-right btn btn-primary" data-toggle="dropdown" href="#">
+        <div class="dropdown-toggle pull-right btn btn-primary dashboard-export-btn" data-toggle="dropdown" href="#">
           <i class="glyphicon glyphicon-download-alt"></i> Export</a>
         </div>
         <ul class="dropdown-menu pull-right">
