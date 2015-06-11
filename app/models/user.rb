@@ -88,20 +88,9 @@ class User
     self.approved ||= APP_CONFIG["default_user_approved"]
     self.teams = []
     
-    self.preferences["selected_measure_ids"] = ["40280381-4555-E1C1-0145-762578A81C4C",
- "40280381-4555-E1C1-0145-B9A06ACE3771",
- "40280381-4555-E1C1-0145-762289881C2E",
- "40280381-4600-425F-0146-1F5867D40E82",
- "40280381-4600-425F-0146-1F6F722B0F17",
- "40280381-4555-E1C1-0145-DD4E02E44678",
- "40280381-4555-E1C1-0145-DC7DC26A44BF",
- "40280381-4555-E1C1-0145-D2B36DBB3FE6",
- "40280381-4555-E1C1-0145-9002B50A2963"]
-    
-    true
-  end
+    self.preferences["selected_measure_ids"] = ["40280381-3D61-56A7-013E-66BC02DA4DEE", "40280381-3E93-D1AF-013E-9F642782222A", "40280381-3E93-D1AF-013E-A36090B72CC8", "40280381-3E93-D1AF-013E-D6E2B772150D", "40280381-3D61-56A7-013E-5CD94A4D64FA", "40280381-3D61-56A7-013E-66A79D4A4A23", "40280381-3D61-56A7-013E-7AF612436402", "40280381-3D61-56A7-013E-5BFF718B5A57",  "40280381-3D61-56A7-013E-7AA509DE6258"]
 
-  # replace nil with [] when it should be an array; see https://github.com/rails/rails/issues/8832
+    #replace nil with [] when it should be an array; see https://github.com/rails/rails/issues/8832
   def denullify_arrays
     # if self.preferences[:selected_measure_ids] == nil
     #   binding.pry
