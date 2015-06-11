@@ -29,9 +29,9 @@ module Api
     def show
       @qr = QME::QualityReport.find(params[:id])
 
-      if !@qr.aggregate_result && !APP_CONFIG['use_opml_structure']
-        cv = HealthDataStandards::CQM::Measure.where(id: @qr.measure_id).first.continuous_variable
-        aqr = QME::QualityReport.where(measure_id: @qr.measure_id, sub_id: @qr.sub_id, 'filters.providers' => [Provider.root.id.to_s], effective_date: @qr.effective_date).first  	           
+      if current_user.preferences.show_aggregate_result && !@qr.aggregate_result && !APP_CONFIG['use_opml_structure'] 
+        cv = @qr.measure.continuous_variable
+        aqr = QME::QualityReport.where(measure_id: @qr.measure_id, sub_id: @qr.sub_id, 'filters.providers' => [Provider.root._id.to_s], effective_date: @qr.effective_date).first  	           
         if aqr.result
           if cv 
             @qr.aggregate_result = aqr.result.OBSERV
@@ -75,9 +75,9 @@ module Api
           "enable_logging" => APP_CONFIG['enable_map_reduce_logging'] || false}, true)
       end
 
-      unless APP_CONFIG['use_opml_structure']	
+      if current_user.preferences.show_aggregate_result && !APP_CONFIG['use_opml_structure']
         agg_options = options.clone
-        agg_options[:filters][:providers] = [Provider.root.id.to_s]
+        agg_options[:filters][:providers] = [Provider.root._id.to_s]
         aqr = QME::QualityReport.find_or_create(params[:measure_id],
                                            params[:sub_id], agg_options)
         if !aqr.calculated?

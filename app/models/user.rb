@@ -87,6 +87,8 @@ class User
     self.staff_role ||= APP_CONFIG["default_user_staff_role"]
     self.approved ||= APP_CONFIG["default_user_approved"]
     self.teams = []
+    # for demo
+    self.practice = Practice.where(organization: "CIPCI").first
     true
   end
 

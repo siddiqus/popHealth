@@ -16,7 +16,11 @@ PopHealth.viz.providerChart = ->
         if d.parent? and value then highlight(d.parent, value)
 
       click = (d) =>
-        window.location.hash = "providers/#{d._id}"
+        if Config.OPML
+          window.location.hash = "providers/#{d._id}"
+        else
+          if !(d._id == PopHealth.rootProvider.get("_id") and PopHealth.currentUser.get("staff_role"))
+            window.location.hash = "providers/#{d._id}"
         return
         # This code is not currently used, it is to handle collapsing and opening
         if not d.loaded
@@ -96,9 +100,9 @@ PopHealth.viz.providerChart = ->
           .attr("transform", (d) -> "translate(#{d.x}, #{d.y})")
         nodeUpdate.select("circle")
           .attr("r", (d) -> d.size)
-
+        
         nodeUpdate.select("text")
-          .text((d) -> if d.active then "#{d.cda_identifiers?[0].root || ""} #{d.cda_identifiers?[0].extension || ""} #{d.given_name}" else "NPI: #{d.cda_identifiers?[0].extension || ""} #{d.given_name || ""} #{d.family_name || ""}")
+          .text((d) -> if d.active then "#{if d.cda_identifiers?[0].root == "2.16.840.1.113883.4.6" then "NPI" else d.cda_identifiers?[0].root || ""} #{d.cda_identifiers?[0].extension || ""} #{d.given_name}" else "#{if d.cda_identifiers?[0].root == "2.16.840.1.113883.4.6" then "NPI" else d.cda_identifiers?[0].root || ""} #{d.cda_identifiers?[0].extension || ""} #{d.given_name || ""} #{d.family_name || ""}")
           .attr("transform", (d) -> if d.active then "translate(25) rotate(0)" else "translate(0,15) rotate(30)")
 
 
@@ -151,6 +155,8 @@ PopHealth.viz.providerChart = ->
         .projection((d) -> [d.x, d.y])
       if data.parent_id?
         data.active = true
+               
+        
         data = {given_name: "#{data.parent.cda_identifiers?[0].root||""}, #{data.parent.cda_identifiers?[0].extension||""} #{data.parent.given_name}", _id: data.parent_id, children: [data]}
       root = data
       root.active = true

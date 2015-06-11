@@ -37,7 +37,7 @@ class TeamsController < ApplicationController
       @team.user_id = @current_user._id
       @team.save!
       
-      if ! current_user.teams
+      if !current_user.teams
         current_user.teams = []
       end
       current_user.teams << @team.id
@@ -46,6 +46,26 @@ class TeamsController < ApplicationController
     else
       redirect_to :action => :new
     end
+  end
+  
+  def create_default
+    if current_user.practice
+      @team = Team.find_or_create_by(:name => "All Providers")
+      @team.providers = []
+      Provider.where(parent_id: current_user.practice.provider_id).each do |prov|
+        @team.providers << prov.id.to_s
+      end
+      @team.user_id = current_user._id
+      @team.save!
+      if !current_user.teams
+        current_user.teams = []
+      end
+      unless current_user.teams.include?(@team.id)
+        current_user.teams << @team.id
+      end
+      current_user.save!
+    end
+    redirect_to :action => :index
   end
 
   # post /teams/1
