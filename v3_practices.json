@@ -1,0 +1,1 @@
+{ "_id" : { "$oid" : "556608b5706f7050ec050000" }, "address" : "", "name" : "Primary Care Office of the Future", "organization" : "CIPCI", "provider_id" : { "$oid" : "556608b5706f7050ec060000" } }
