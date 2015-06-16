@@ -87,8 +87,8 @@ class User
     self.staff_role ||= APP_CONFIG["default_user_staff_role"]
     self.approved ||= APP_CONFIG["default_user_approved"]
     self.teams = []
-    
     self.preferences["selected_measure_ids"] = ["40280381-3D61-56A7-013E-66BC02DA4DEE", "40280381-3E93-D1AF-013E-9F642782222A", "40280381-3E93-D1AF-013E-A36090B72CC8", "40280381-3E93-D1AF-013E-D6E2B772150D", "40280381-3D61-56A7-013E-5CD94A4D64FA", "40280381-3D61-56A7-013E-66A79D4A4A23", "40280381-3D61-56A7-013E-7AF612436402", "40280381-3D61-56A7-013E-5BFF718B5A57", "40280381-3D61-56A7-013E-7AA509DE6258"]
+    true
   end
   
   #replace nil with [] when it should be an array; see https://github.com/rails/rails/issues/8832
@@ -96,7 +96,7 @@ class User
     # if self.preferences[:selected_measure_ids] == nil
     #   binding.pry
     # end
-    self.preferences["selected_measure_ids"] ||= []
+    self.preferences["selected_measure_ids"] = ["40280381-3D61-56A7-013E-66BC02DA4DEE", "40280381-3E93-D1AF-013E-9F642782222A", "40280381-3E93-D1AF-013E-A36090B72CC8", "40280381-3E93-D1AF-013E-D6E2B772150D", "40280381-3D61-56A7-013E-5CD94A4D64FA", "40280381-3D61-56A7-013E-66A79D4A4A23", "40280381-3D61-56A7-013E-7AF612436402", "40280381-3D61-56A7-013E-5BFF718B5A57", "40280381-3D61-56A7-013E-7AA509DE6258"]
     # puts self.preferences[:selected_measure_ids]
   end
 

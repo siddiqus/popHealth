@@ -20,5 +20,8 @@ class ImportArchiveJob
 
   def after
     File.delete(@file)
+    HealthDataStandards::CQM::QueryCache.delete_all
+    PatientCache.delete_all
+    Mongoid.default_session["rollup_buffer"].drop()
   end
 end
