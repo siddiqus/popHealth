@@ -1,47 +1,11 @@
 <div class="patient">
-  <div class="col-measure-info">
-    <h1><i class="fa fa-tasks"></i> Measures</h1>
-    <div class="panel-group" id="measures">
-      {{#collection measures}}
-      <div class="panel panel-default">
-        <div class="panel-heading">
-            <a class="measure-title" {{#if submeasures}}data-toggle="collapse" data-parent="#measures" href="#m{{id}}"{{else}}href="#measures/{{id}}/patient_results"{{/if}}>
-              {{#if submeasures}}<div class="submeasure-expander"><i class="fa fa-plus-square-o"></i></div>{{/if}}
-              {{title}}
-            </a>
-        </div>
-        {{#if submeasures}}
-        <div id="m{{id}}" class="panel-collapse collapse">
-          <div class="panel-body">
-            {{#collection submeasures}}
-            <a href="#measures/{{../id}}/{{id}}/patient_results" class="btn btn-measure btn-default">
-              {{subtitle}}
-            </a>
-            {{/collection}}
-          </div>
-        </div>
-        {{/if}}
-      </div>
-      {{/collection}}
-    </div>
-
-
-    {{!--
-    {{#collection measure_results}}
-      <a href="#measures/{{measure_id}}{{#if sub_id}}/{{sub_id}}{{/if}}" class="btn btn-measure btn-default">
-        {{measure_title}}{{#if measure_subtitle}}: {{measure_subtitle}}{{/if}}
-      </a>
-    {{/collection}}
-    --}}
-  </div>
-
   <div class="col-patient-info">
     <h1 class="patient-heading"><i class="fa fa-user"></i> {{first}} {{last}}</h1>
     <div class="timeline-entry">
       <div class="patient-data-list">
         <dl class="dl-horizontal">
           <dt>PATIENT ID</dt>
-          <dd><div class="patient-medical-record-id" title="{{medical_record_number}}">{{medical_record_number}}</div></dd>
+          <dd><div class="patient-medical-record-id" title="{{mrn}}">{{mrn}}</div></dd>
           <dt>DOB</dt>
           <dd>{{birthdate}}</dd>
           <dt>GENDER</dt>
@@ -107,7 +71,7 @@
             </dl>
             <dl class="dl-horizontal">
               <dt>date</dt>
-              <dd>{{start_time}}{{#if display_end_time}} &ndash; {{end_time}}{{/if}}</dd>
+              <dd>{{#if start_time}} {{start_time}} {{else}} {{time_format}} {{/if}} {{#if display_end_time}} &ndash; {{end_time}}{{/if}}</dd>
             </dl>
           </div>
         </div>
