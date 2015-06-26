@@ -27,8 +27,10 @@ class Thorax.Collections.PatientResults extends Thorax.Collection
     options.data ?= {}
     options.data[@population.toLowerCase()] = true if @population?
     options.data.provider_id = @providerId if @providerId?
+    options.data.per_page = 10
     result = super(options)
     result.done => @hasMoreResults = /rel="next"/.test(result.getResponseHeader('Link'))
   fetchNextPage: (options = {perPage: 10}) ->
     data = {page: @currentPage(options.perPage) + 1, per_page: options.perPage}
     @fetch(remove: false, data: data) if @hasMoreResults
+

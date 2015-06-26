@@ -43,7 +43,7 @@
     example '{"_id":"52fbbf34b99cc8a728000068","birthdate":1276869600,"first":"John","gender":"M","last":"Peters","encounters":[{...}], ...}'
     def show
       json_methods = [:language_names]
-      json_methods << :cache_results if params[:include_results]
+#      json_methods << :cache_results if params[:include_results]
       json = @patient.as_json({methods: json_methods})
       provider_list = @patient.provider_performances.map{ |p| p.provider}
       provider_list.each do |prov|
@@ -53,9 +53,9 @@
           end
         end
       end
-      if results = json.delete('cache_results')
-        json['measure_results'] = results_with_measure_metadata(results)
-      end
+#      if results = json.delete('cache_results')
+#        json['[measure_results'] = results_with_measure_metadata(results)
+#      end
       Log.create(:username =>   current_user.username,
                  :event =>      'patient record viewed',
                  :medical_record_number => @patient.medical_record_number)

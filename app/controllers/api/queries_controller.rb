@@ -130,7 +130,9 @@ module Api
       qr = QME::QualityReport.find(params[:id])
       authorize! :read, qr
       # this returns a criteria object so we can filter it additionally as needed
-      results = qr.patient_results
+#      results = qr.patient_results
+      query = {'value.measure_id' => qr.measure_id, 'value.effective_date' => qr.effective_date, 'value.provider_performances.provider_id' => qr.filters[:providers].first}
+      results = QME::PatientCache.where(query)
       render json: paginate(patient_results_api_query_url(qr),results.where(build_patient_filter).only('_id', 'value.medical_record_id', 'value.first', 'value.last', 'value.birthdate', 'value.gender', 'value.patient_id'))
     end
 
@@ -172,7 +174,11 @@ module Api
     def build_patient_filter
       patient_filter = {}
       patient_filter["value.IPP"]= {"$gt" => 0} if params[:ipp] == "true"
-      patient_filter["value.DENOM"]= {"$gt" => 0} if params[:denom] == "true"
+      
+      if params[:denom] == "true"
+        patient_filter["value.DENOM"]= {"$gt" => 0} 
+        patient_filter["value.DENEX"] = 0
+      end
       patient_filter["value.NUMER"]= {"$gt" => 0} if params[:numer] == "true"
       patient_filter["value.DENEX"]= {"$gt" => 0} if params[:denex] == "true"
       patient_filter["value.DENEXCEP"]= {"$gt" => 0} if params[:denexcep] == "true"
