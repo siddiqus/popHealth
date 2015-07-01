@@ -53,7 +53,6 @@ class Provider
   end
 
   def self.resolve_provider(provider_hash, patient=nil)
-    debugger
     catch_all_provider_hash = { :title => "",
                                 :given_name => "",
                                 :family_name=> "",
