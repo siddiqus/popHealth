@@ -10,10 +10,9 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
     failed_dir ||=File.join(File.dirname(file))
 
     patient_id_list = nil
-    count = 0;
+
     Zip::ZipFile.open(file.path) do |zipfile|
       zipfile.entries.each do |entry|
-        count+= 1;
         if entry.name
           if entry.name.split("/").last == "patient_manifest.txt"
             patient_id_list = zipfile.read(entry.name)
@@ -26,7 +25,6 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
       end
     end
 
-#        upload_log.write("#{count}" + "\n")
     missing_patients = []
 
     #if there was a patient manifest, theres a patient id list we need to load
@@ -52,7 +50,7 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
   end
   end
 
-  def self.import_file(name,data,failed_dir,provider_map={}, practice=nil, error_log=nil, upload_log=nil)
+  def self.import_file(name,data,failed_dir,provider_map={}, practice=nil)
     begin
       ext = File.extname(name)
       if ext == ".json"
@@ -72,12 +70,11 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
     end
   end
 
-  def self.import(xml_data, provider_map = {}, practice_id=nil, error_log=nil, upload_log=nil)
+  def self.import(xml_data, provider_map = {}, practice_id=nil)
     doc = Nokogiri::XML(xml_data)
 
     providers = []
     root_element_name = doc.root.name
-
     if root_element_name == 'ClinicalDocument'
       doc.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
       doc.root.add_namespace_definition('sdtc', 'urn:hl7-org:sdtc')
@@ -99,10 +96,6 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
         providers = HealthDataStandards::Import::CDA::ProviderImporter.instance.extract_providers(doc, record)
       rescue Exception => e
         STDERR.puts "error extracting providers"
-#            error_log.write( $! )
-#		      	error_log.write("\n")
-#		      	errpr_log.write ( $@ )
-#            upload_log.write("MRN: " + "#{xml_data}" + "\n")
       end
     else
       return {status: 'error', message: 'Unknown XML Format', status_code: 400}
@@ -113,7 +106,6 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
       practice_provider = practice.provider
       
       npi_providers = providers.map {|perf| perf}
-      
       name = practice.name + " Unassigned"
       cda_identifier = CDAIdentifier.new({root: APP_CONFIG['orphan_provider']['root'], extension: name})
       providers.each do |perf|
@@ -150,7 +142,7 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
           end
         end
       end
-
+      
       # if no providers assigned, then assign to orphan
       if npi_providers.empty?
         orphan_provider = Provider.where("cda_identifiers.extension" => name).first
@@ -213,4 +205,3 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
     record.save
   end
 end
-
