@@ -59,12 +59,21 @@ class PracticesController < ApplicationController
     end
   end
   
+  def remove_providers
+    practice = Practice.find(params[:id])
+    Provider.where(parent_id: practice.provider.id).delete
+    
+    respond_to do |format|
+      format.html { redirect_to :action => :index }
+    end
+  end
+  
   # DELETE /practices/1
   # DELETE /practices/1.json
   def destroy
     @practice = Practice.find(params[:id])
     Record.where(practice_id: @practice.id).delete
-    Provider.where(parent_id: @practice.provider.id).delete
+    Provider.where(parent_id: @practice.provider.id).delete if @practice.provider
     @practice.destroy
 
     respond_to do |format|

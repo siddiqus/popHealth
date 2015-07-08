@@ -8,5 +8,5 @@ class Preference
   field :show_aggregate_result, type: Boolean, default: false
   field :should_display_provider_tree, type: Boolean, default: false
   
-  belongs_to :user, dependent: :destroy
+  belongs_to :user
 end
