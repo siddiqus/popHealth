@@ -108,7 +108,7 @@
             </dl>
             <dl class="dl-horizontal">
               <dt>date</dt>
-              <dd>{{start_time}}{{#if display_end_time}} &ndash; {{end_time}}{{/if}}</dd>
+              <dd>{{#if start_time}} {{start_time}} {{else}} {{time_format}} {{/if}} {{#if display_end_time}} &ndash; {{end_time}}{{/if}}</dd>
             </dl>
           </div>
         </div>

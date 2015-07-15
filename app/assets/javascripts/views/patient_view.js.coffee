@@ -5,7 +5,7 @@ class Thorax.Views.PatientView extends Thorax.View
 #      @$('#measures').on 'show.bs.collapse hide.bs.collapse', (e) ->
 #        $(e.target).prev().toggleClass('active').find('.submeasure-expander .fa').toggleClass('fa-plus-square-o fa-minus-square-o')
   context: ->
-    mrn = PopHealth.Helpers.formatMRN(String(@model.get("medical_record_number")))
+    mrn = if @model.get("medical_record_number") then PopHealth.Helpers.formatMRN(String(@model.get("medical_record_number"))) else 'N/A'
     _(super).extend
       first: PopHealth.Helpers.maskName @model.get('first')
       last: PopHealth.Helpers.maskName @model.get('last')
@@ -38,7 +38,7 @@ class Thorax.Views.EntryView extends Thorax.View
     _(super).extend
       start_time: formatTime @model.get('start_time')
       end_time: formatTime @model.get('end_time') if @model.get('end_time')?
-      time_format: formatTime @model.get('time')  #if @model.get('time')?
+      time_format: formatTime @model.get('time')  if @model.get('time')?
       display_end_time: @model.get('end_time') and (formatTime @model.get('start_time')) isnt (formatTime @model.get('end_time'))
       entry_type: @model.entryType
       icon: @model.icon
@@ -46,7 +46,6 @@ class Thorax.Views.EntryView extends Thorax.View
 
   # Helper function for date/time conversion
   formatTime = (time) -> moment(time).format('M/DD/YYYY') if time
-   
 
 ### Note ###
 #
