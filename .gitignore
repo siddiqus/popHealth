@@ -1,5 +1,6 @@
 *.log
 *.sqlite3
+public/assets/*
 public/clinical_documents
 config/database.yml
 coverage.data
