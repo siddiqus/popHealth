@@ -202,6 +202,13 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
     end
     # -- medication status 
     
+    # CPT code fix
+    if record.encounters.present?
+      record.encounters.each do |encounter|
+        encounter.codes = {"CPT" => ["99213"]} 
+      end    
+    end
+    
     record.save
   end
 end
