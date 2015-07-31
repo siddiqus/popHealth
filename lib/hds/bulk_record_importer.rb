@@ -219,7 +219,6 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
     Record::Valid_Sections.each do |section|   
       if ! record.send(section).blank?
         record.send(section).each do |entry| 
-          debugger
           if entry.start_time
             entry.start_time = self.format_date(entry.start_time)
           end
