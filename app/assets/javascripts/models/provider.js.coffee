@@ -33,8 +33,7 @@ class Thorax.Collections.Providers extends Thorax.Collection
     data = {page: @currentPage(options.perPage) + 1, per_page: options.perPage}
     @fetch(remove: false, data: data) if @hasMoreResults
 
-# A collection of providers under a given team. Team ID specified in URL when called.    
+# A collection of providers under a given team. Setting the team ID from a parameter does not load the collection properly, so the Team ID is specified in the URL when called.  See Thorax.Views.TeamMeasuresView
 class Thorax.Collections.TeamProviders extends Thorax.Collection
-  url: '/api/teams/team_providers'
+  url: "/api/teams/team_providers"
   model: Thorax.Models.Provider
-  
