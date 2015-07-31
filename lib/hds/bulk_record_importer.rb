@@ -215,17 +215,19 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
       end
     end
     
+    
     Record::Valid_Sections.each do |section|   
-      if ! data.send(section).blank?
-        data.send(section).each do |entry| 
+      if ! record.send(section).blank?
+        record.send(section).each do |entry| 
+          debugger
           if entry.start_time
-            entry.start_time = format_date(entry.start_time)
+            entry.start_time = self.format_date(entry.start_time)
           end
           if entry.end_time
-            entry.end_time = format_date(entry.end_time)
+            entry.end_time = self.format_date(entry.end_time)
           end
           if entry.time
-            entry.time = format_date(entry.time)
+            entry.time = self.format_date(entry.time)
           end
         end
       end
@@ -234,11 +236,10 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
     record.save
   end
   
+  def self.format_date(time)
+    tm = Time.at(time)
+    new_tm = Time.new(tm.year, tm.month, tm.day)
+    new_tm.to_i
+  end  
   
-  private
-  
-  def format_time(time)
-    # fix 
-    return Time.now
-  end
 end
