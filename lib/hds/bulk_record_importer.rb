@@ -179,7 +179,7 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
     icd9 = ["493.00", "493.01", "493.02", "493.10", "493.11", "493.12", "493.20", "493.21", "493.22", "493.81" , "493.82", "493.90", "493.91", "493.92"]
 
     asthma_patient = false
-    if record.conditions
+    if record.conditions.present?
       record.conditions.each do |con|
         if con.codes 
           if (con.codes['ICD-10-CM'] && icd10.include?(con.codes['ICD-10-CM'].first)) || (con.codes['ICD-9-CM'] && icd9.include?(con.codes['ICD-9-CM'].first))
@@ -190,7 +190,7 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
       end
     end 
 
-    if asthma_patient && record.medications
+    if asthma_patient && record.medications.present?
       record.medications.each do |med|
         if med.status_code == nil || med.status_code["HL7 ActStatus"] != ["dispensed"]
           med.status_code = {"HL7 ActStatus" => ["dispensed"]}
@@ -204,11 +204,41 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
     
     # CPT code fix
     if record.encounters.present?
-      record.encounters.each do |encounter|
-        encounter.codes = {"CPT" => ["99213"]} 
+      record.encounters.each do |enc|
+        enc.codes = {"CPT" => ["99213"]} 
       end    
     end
     
+    if record.conditions.present?
+      record.conditions.each do |con|
+        con.start_time = record.birthdate
+      end
+    end
+    
+    Record::Valid_Sections.each do |section|   
+      if ! data.send(section).blank?
+        data.send(section).each do |entry| 
+          if entry.start_time
+            entry.start_time = format_date(entry.start_time)
+          end
+          if entry.end_time
+            entry.end_time = format_date(entry.end_time)
+          end
+          if entry.time
+            entry.time = format_date(entry.time)
+          end
+        end
+      end
+    end     
+    
     record.save
+  end
+  
+  
+  private
+  
+  def format_time(time)
+    # fix 
+    return Time.now
   end
 end
