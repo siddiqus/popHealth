@@ -82,6 +82,28 @@ class User
   validates :email, presence: true, length: {minimum: 3, maximum: 254}, format: {with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
   validates :username, :presence => true, length: {minimum: 3, maximum: 254}
 
+  validate :password_complexity 
+   
+  def password_complexity
+	  if password.present? and not password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{0,}$/)
+    #if password.present? and not password.match(^(?=.*[a-zA-Z])(?=.*[0-9]))
+      errors.add :password, "must include at least one lowercase letter, one uppercase letter, and one number"
+      #if not password.match(/^(?=.*[a-z]). /)
+      #  errors.add :password, "must include at least one lowercase letter"
+      #end
+      #if not password.match(/^(?=.*[A-Z]). /)
+      #  errors.add :password, "must include at least one uppercase letter"
+      #end
+      #if not password.match(/^(?=.*\d]). /)
+      #  errors.add :password, "must include at least one number"
+      #end
+      #if not password.match(/^(?=.*(?!.*\s)). /)
+      #  errors.add :password, "must include at least one special character"
+      #end
+    end
+  end
+
+
   def set_defaults
     self.staff_role ||= APP_CONFIG["default_user_staff_role"]
     self.approved ||= APP_CONFIG["default_user_approved"]
