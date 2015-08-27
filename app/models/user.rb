@@ -12,7 +12,7 @@ class User
 
   DEFAULT_EFFECTIVE_DATE = Time.gm(2013, 12, 31)
 
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable, :lockable, 
          :recoverable, :rememberable, :trackable, :validatable, :authentication_keys => [:username]
 
 
@@ -32,7 +32,11 @@ class User
    field :last_sign_in_at,    :type => Time
    field :current_sign_in_ip, :type => String
    field :last_sign_in_ip,    :type => String
-
+   
+   ## Lockable
+   field :failed_attempts,    :type => Integer, default: 0
+   field :unlock_token,       :type => String
+   field :locked_at,          :type => DateTime
 
   :remember_created_at
   :reset_password_token
@@ -102,7 +106,6 @@ class User
       #end
     end
   end
-
 
   def set_defaults
     self.staff_role ||= APP_CONFIG["default_user_staff_role"]
