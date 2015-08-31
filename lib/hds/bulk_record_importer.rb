@@ -101,6 +101,9 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
       return {status: 'error', message: 'Unknown XML Format', status_code: 400}
     end
 
+    end_date = nil
+    start_date = nil
+    
     if practice_id
       practice = Practice.find(practice_id)
       practice_provider = practice.provider
@@ -120,7 +123,7 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
             new_prov.save!
           end
           npi_providers.delete(perf)
-          npi_providers << ProviderPerformance.new(start_date: perf.start_date, end_date: perf.end_date, provider: new_prov)  
+          npi_providers << ProviderPerformance.new(start_date: start_date, end_date: end_date, provider: new_prov)  
         else
           if prov.parent == nil
             prov.parent = practice_provider
@@ -131,13 +134,14 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
             prov_check = Provider.where({'cda_identifiers.extension' => prov.cda_identifiers.first.extension, parent_id: practice_provider.id}).first
             if prov_check
               npi_providers.delete(perf)
-              npi_providers << ProviderPerformance.new(start_date: perf.start_date, end_date: perf.end_date, provider: prov_check)
+       
+              npi_providers << ProviderPerformance.new(start_date: start_date, end_date: end_date, provider: prov_check)
             else            
               new_prov = prov.clone
               new_prov.parent = practice_provider
               new_prov.save
               npi_providers.delete(perf)
-              npi_providers << ProviderPerformance.new(start_date: perf.start_date, end_date: perf.end_date, provider: new_prov)
+              npi_providers << ProviderPerformance.new(start_date: start_date, end_date: end_date, provider: new_prov)
             end
           end
         end
@@ -153,7 +157,7 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
           new_prov.parent = practice_provider
           new_prov.save!
         end
-        npi_providers << ProviderPerformance.new(provider: new_prov)
+        npi_providers << ProviderPerformance.new(provider: new_prov, end_date: end_date)
       end
       record.provider_performances = npi_providers
       
@@ -170,7 +174,7 @@ class BulkRecordImporter < HealthDataStandards::Import::BulkRecordImporter
     end
     providers.each do |prov|
       prov.provider.ancestors.each do |ancestor|
-        record.provider_performances.push(ProviderPerformance.new(start_date: prov.start_date, end_date: prov.end_date, provider: ancestor))
+        record.provider_performances.push(ProviderPerformance.new(start_date: start_date, end_date: end_date, provider: ancestor))
       end
     end
 
