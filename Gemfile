@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '~> 4.1.2'
 gem 'quality-measure-engine', '3.1.2'
 gem "hqmf2js", :git=> "https://github.com/projecttacoma/hqmf2js.git"
-gem 'health-data-standards', '3.5.3'
+gem 'health-data-standards', path: "../hds-v3" #'3.5.3'
 #gem 'health-data-standards', :path=> '../hds-v3'
 gem 'nokogiri'
 gem 'rubyzip'
