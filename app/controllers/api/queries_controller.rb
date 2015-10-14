@@ -28,17 +28,47 @@ module Api
     description "Gets a clinical quality measure calculation. If calculation is completed, the response will include the results."
     def show
       @qr = QME::QualityReport.find(params[:id])
-
-      if current_user.preferences.show_aggregate_result && !@qr.aggregate_result && !APP_CONFIG['use_opml_structure'] 
+      if current_user.preferences.show_aggregate_result && !@qr.aggregate_result && !APP_CONFIG['use_opml_structure']
         cv = @qr.measure.continuous_variable
-        aqr = QME::QualityReport.where(measure_id: @qr.measure_id, sub_id: @qr.sub_id, 'filters.providers' => [Provider.root._id.to_s], effective_date: @qr.effective_date).first  	           
+        aqr = QME::QualityReport.where(measure_id: @qr.measure_id, sub_id: @qr.sub_id, 'filters.providers' => [Provider.root._id.to_s], effective_date: @qr.effective_date).first
         if aqr.result
-          if cv 
+          if cv
             @qr.aggregate_result = aqr.result.OBSERV
           else
             @qr.aggregate_result = (aqr.result.DENOM > 0)? (100*((aqr.result.NUMER).to_f / (aqr.result.DENOM - aqr.result.DENEXCEP - aqr.result.DENEX).to_f)).round : 0
           end
 	        @qr.save!
+        end
+      end
+
+      if @qr.patient_results
+        provider_id = @qr.try(:filters)['providers'].first
+        effective_date = @qr.effective_date
+        measure_id = @qr.measure_id
+        sub_id = @qr.sub_id
+
+        @qr.patient_results.each do |pr|
+          mp = MeasurePatient.where(
+            measure_id: measure_id,
+            sub_id: sub_id,
+            provider_id: provider_id,
+            effective_date: effective_date,
+
+            ipp: pr.value.IPP,
+            numer: pr.value.NUMER,
+            denom: pr.value.DENOM,
+            antinumerator: pr.value.antinumerator,
+            denex: pr.value.DENEX,
+            denexcep: pr.value.DENEXCEP,
+
+            patient_id: pr.value['patient_id'],
+            medical_record_id: pr.value['medical_record_id'],
+            first: pr.value['first'],
+            last: pr.value['last'],
+            birthdate: pr.value['birthdate'],
+            gender: pr.value['gender']
+          ).first_or_create
+          mp.save!
         end
       end
 
@@ -116,7 +146,7 @@ module Api
     param :denom, /true|false/, :desc => 'Ensure patients meet the denominator for the measure', :required => false
     param :numer, /true|false/, :desc => 'Ensure patients meet the numerator for the measure', :required => false
     param :denex, /true|false/, :desc => 'Ensure patients meet the denominator exclusions for the measure', :required => false
-    param :denexcp, /true|false/, :desc => 'Ensure patients meet the denominator exceptions for the measure', :required => false
+    param :denexcep, /true|false/, :desc => 'Ensure patients meet the denominator exceptions for the measure', :required => false
     param :msrpopl, /true|false/, :desc => 'Ensure patients meet the measure population for the measure', :required => false
     param :antinumerator, /true|false/, :desc => 'Ensure patients are not in the numerator but are in the denominator for the measure', :required => false
     param_group :pagination, Api::PatientsController
@@ -130,8 +160,15 @@ module Api
       qr = QME::QualityReport.find(params[:id])
       authorize! :read, qr
       # this returns a criteria object so we can filter it additionally as needed
-      results = qr.patient_results
-      render json: paginate(patient_results_api_query_url(qr),results.where(build_patient_filter).order_by([:last.asc, :first.asc]))
+      # results = qr.patient_results
+      # render json: paginate(patient_results_api_query_url(qr),results.where(build_patient_filter).order_by([:last.asc, :first.asc]))
+      query = build_measure_patient_filter
+      query[:measure_id] = qr.measure_id
+      query[:sub_id] = qr.sub_id
+      query[:effective_date] = qr.effective_date
+      query[:provider_id] = qr.filters['providers'].first
+      patient_results = MeasurePatient.where(query)
+      render json: paginate(patient_results_api_query_url(qr), patient_results)
     end
 
     def patients
@@ -179,6 +216,17 @@ module Api
       patient_filter["value.MSRPOPL"]= {"$gt" => 0} if params[:msrpopl] == "true"
       patient_filter["value.antinumerator"]= {"$gt" => 0} if params[:antinumerator] == "true"
       patient_filter["value.provider_performances.provider_id"]= BSON::ObjectId.from_string(params[:provider_id]) if params[:provider_id]
+      patient_filter
+    end
+
+    def build_measure_patient_filter
+      patient_filter = {}
+      patient_filter[:ipp]= 1 if params[:ipp] == "true"
+      patient_filter[:denom]= 1 if params[:denom] == "true"
+      patient_filter[:numer]= 1 if params[:numer] == "true"
+      patient_filter[:denex]= 1 if params[:denex] == "true"
+      patient_filter[:denexcep]= 1 if params[:denexcep] == "true"
+      patient_filter[:antinumerator]= 1 if params[:antinumerator] == "true"
       patient_filter
     end
 
